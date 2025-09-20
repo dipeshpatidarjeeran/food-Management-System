@@ -1,23 +1,98 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Add New Category</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-  <div class="overlay"></div>
-  <div class="card">
-    <h2>➕ Add New Category</h2>
-    <form method="post">
-      <div>
-        <label for="category">Enter Category Name</label>
-        <input type="text" id="category" name="cname" placeholder="e.g. Beverages, Desserts" required>
-      </div>
-      <button type="submit">Add Category</button>
-    </form>
-    <p class="note">Easily manage your food categories 🍔🍕🥗</p>
-  </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block extra_css %}
+<style>
+  /* Modal card */
+  .modal-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .modal-card h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #2c3e50;
+  }
+
+  .modal-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch; /* full width input/button */
+  }
+
+  .modal-card label {
+    font-size: 15px;
+    color: #555;
+    text-align: left;
+  }
+
+  .modal-card input[type="text"] {
+    padding: 10px 15px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 100%; /* fix input width */
+    box-sizing: border-box;
+  }
+
+  .modal-card input[type="text"]:focus {
+    border-color: #2f80ed;
+    box-shadow: 0 0 5px rgba(47,128,237,0.3);
+  }
+
+  .modal-card button {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .modal-card button:hover {
+    transform: scale(1.03);
+  }
+
+  .modal-card .note {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #777;
+  }
+
+  @keyframes fadeIn {
+    0% {opacity:0; transform: translate(-50%, -50%) scale(0.8);}
+    100% {opacity:1; transform: translate(-50%, -50%) scale(1);}
+  }
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="overlay"></div>
+<div class="modal-card">
+  <h1>➕ Add New Category</h1>
+  <form method="post">
+    <label for="category">Enter Category Name</label>
+    <input type="text" id="category" name="cname" placeholder="e.g. Beverages, Desserts" required>
+    <button type="submit">Add Category</button>
+  </form>
+  <p class="note">Easily manage your food categories 🍔🍕🥗</p>
+</div>
+
+
+{% endblock %}

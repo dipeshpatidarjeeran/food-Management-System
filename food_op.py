@@ -31,6 +31,16 @@ def addFood():
         return redirect("/showAllFoods")
     
 def showAllFoods():
-    return render_template("foods/showAllFoods.html")    
+    sql = "select * from food"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    foods = cursor.fetchall()
+    return render_template("foods/showAllFoods.html",foods=foods)  
+
+
 def dashBoard():
-    return render_template("dashboard.html")
+    sql = "select * from food"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    foods = cursor.fetchall()
+    return render_template("dashboard.html",foods=foods)

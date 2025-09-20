@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Manage Foods</title>
+<style>
+  * {margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif;}
+  body {display:flex; min-height:100vh; background:#f4f6f9;}
+
+  /* Sidebar */
+  .sidebar {
+    width:220px;
+    background:linear-gradient(180deg,#2c3e50,#34495e);
+    color:#fff;
+    padding:20px;
+    position:fixed;
+    top:0; bottom:0;
+  }
+  .sidebar h2 {text-align:center; margin-bottom:20px; font-size:22px;}
+  .sidebar a {
+    display:block; color:#fff; text-decoration:none; margin:12px 0; padding:10px;
+    border-radius:5px; transition:0.3s ease; cursor:pointer;
+  }
+  .sidebar a:hover {background:#1abc9c; transform:translateX(5px);}
+
+  /* Main content */
+  .main-content {margin-left:220px; flex:1; padding:20px;}
+  .topbar {
+    display:flex; justify-content:space-between; align-items:center;
+    background:#fff; padding:15px; border-radius:8px; margin-bottom:20px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  }
+  .topbar h1 {font-size:20px;}
+  .btn-logout {
+    background:#e74c3c; color:#fff; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; transition:0.3s ease;
+  }
+  .btn-logout:hover {background:#c0392b; transform:scale(1.05);}
+
+  /* Stats cards */
+  .stats {display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:20px;}
+  .card {background:#fff; padding:20px; border-radius:10px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:0.3s ease;}
+  .card:hover {transform:translateY(-5px); box-shadow:0 6px 15px rgba(0,0,0,0.2);}
+  .card h3 {margin-bottom:10px; color:#2c3e50;}
+  .card p {font-size:18px; font-weight:bold; color:#27ae60;}
+
+  /* Add button */
+  .btn-add {
+    background:#27ae60; color:#fff; padding:10px 15px; border:none; border-radius:5px; cursor:pointer; margin-bottom:20px; transition:0.3s ease;
+  }
+  .btn-add:hover {background:#1e8449; transform:scale(1.05);}
+
+  /* Food cards grid */
+  .food-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr); /* 3 cards per row */
+    gap:20px;
+  }
+  .food-card {
+    background:#fff; border-radius:10px; padding:15px; text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:0.3s ease;
+  }
+  .food-card:hover {
+    transform:translateY(-5px); box-shadow:0 6px 15px rgba(0,0,0,0.2);
+  }
+  .food-card img {
+    width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:10px;
+  }
+  .food-card h3 {margin-bottom:8px; color:#2c3e50;}
+  .food-card p {margin-bottom:10px; color:#27ae60; font-weight:bold;}
+  .food-card button {
+    background:#2980b9; color:#fff; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; transition:0.3s ease;
+  }
+  .food-card button:hover {background:#21618c; transform:scale(1.05);}
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .food-grid {grid-template-columns:repeat(2,1fr);} /* 2 cards on tablet */
+  }
+  @media (max-width: 600px) {
+    .food-grid {grid-template-columns:1fr;} /* 1 card on mobile */
+    .sidebar {position:relative; width:100%; height:auto;}
+    .main-content {margin-left:0;}
+  }
+  .section-title {
+    font-size: 24px;
+    margin: 25px 0 20px;
+    padding: 10px 15px;
+    border-left: 5px solid #1abc9c;
+    background: #ecf9f6;
+    color: #2c3e50;
+    font-weight: 700;
+    border-radius: 5px;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .section-title span {
+    margin-right: 8px;
+  }
+  .sidebar a.active {
+    background:#1abc9c;
+    font-weight:bold;
+    transform:translateX(5px);
+  }
+  
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="/Dashboard" class="{% if request.path == '/Dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="/showAllCategory" class="{% if request.path == '/showAllCategory' %}active{% endif %}">Manage Categories</a>
+    <a href="/showAllFoods" class="{% if request.path == '/showAllFoods' %}active{% endif %}">Manage Foods</a>
+    <a href="#">Manage Orders</a>
+    <a href="#">Manage Users</a>
+    <a href="#">Reports</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

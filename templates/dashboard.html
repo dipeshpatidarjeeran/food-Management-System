@@ -1,138 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Manage Foods</title>
-<style>
-  * {margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif;}
-  body {display:flex; min-height:100vh; background:#f4f6f9;}
-
-  /* Sidebar */
-  .sidebar {
-    width:220px;
-    background:linear-gradient(180deg,#2c3e50,#34495e);
-    color:#fff;
-    padding:20px;
-    position:fixed;
-    top:0; bottom:0;
-  }
-  .sidebar h2 {text-align:center; margin-bottom:20px; font-size:22px;}
-  .sidebar a {
-    display:block; color:#fff; text-decoration:none; margin:12px 0; padding:10px;
-    border-radius:5px; transition:0.3s ease; cursor:pointer;
-  }
-  .sidebar a:hover {background:#1abc9c; transform:translateX(5px);}
-
-  /* Main content */
-  .main-content {margin-left:220px; flex:1; padding:20px;}
-  .topbar {
-    display:flex; justify-content:space-between; align-items:center;
-    background:#fff; padding:15px; border-radius:8px; margin-bottom:20px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
-  }
-  .topbar h1 {font-size:20px;}
-  .btn-logout {
-    background:#e74c3c; color:#fff; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; transition:0.3s ease;
-  }
-  .btn-logout:hover {background:#c0392b; transform:scale(1.05);}
-
-  /* Stats cards */
-  .stats {display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:20px;}
-  .card {background:#fff; padding:20px; border-radius:10px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:0.3s ease;}
-  .card:hover {transform:translateY(-5px); box-shadow:0 6px 15px rgba(0,0,0,0.2);}
-  .card h3 {margin-bottom:10px; color:#2c3e50;}
-  .card p {font-size:18px; font-weight:bold; color:#27ae60;}
-
-  /* Add button */
-  .btn-add {
-    background:#27ae60; color:#fff; padding:10px 15px; border:none; border-radius:5px; cursor:pointer; margin-bottom:20px; transition:0.3s ease;
-  }
-  .btn-add:hover {background:#1e8449; transform:scale(1.05);}
-
-  /* Food cards grid */
-  .food-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-  }
-  .food-card {
-    background:#fff; border-radius:10px; padding:15px; text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:0.3s ease;
-  }
-  .food-card:hover {
-    transform:translateY(-5px); box-shadow:0 6px 15px rgba(0,0,0,0.2);
-  }
-  .food-card img {
-    width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;
-  }
-  .food-card h3 {margin-bottom:8px; color:#2c3e50;}
-  .food-card p {margin-bottom:10px; color:#27ae60; font-weight:bold;}
-  .food-card button {
-    background:#2980b9; color:#fff; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; transition:0.3s ease;
-  }
-  .food-card button:hover {background:#21618c; transform:scale(1.05);}
-</style>
-</head>
-<body>
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>Admin Panel</h2>
-    <a href="#">Dashboard</a>
-    <a href="/showAllCategory">Manage Categories</a>
-    <a href="/showAllFoods">Manage Foods</a>
-    <a href="#">Manage Orders</a>
-    <a href="#">Manage Users</a>
-    <a href="#">Reports</a>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content">
+{% extends "base.html" %}
+{% block content %}
     <div class="topbar">
-      <h1>Manage Foods</h1>
+      <h1>Admin Dashboard</h1>
       <button class="btn-logout">Logout</button>
     </div>
 
     <!-- Stats Cards -->
     <section class="stats">
-      <div class="card"><h3>Total Foods</h3><p>25</p></div>
+      <div class="card"><h3>Total Foods</h3><p>{{ foods|length }}</p></div>
       <div class="card"><h3>Total Orders</h3><p>120</p></div>
       <div class="card"><h3>Categories</h3><p>8</p></div>
       <div class="card"><h3>Users</h3><p>50</p></div>
     </section>
-
-    <!-- Add Food Button -->
-    <button class="btn-add">+ Add New Food</button>
+    <!-- Section Title -->
+    <h2 class="section-title">
+      <span>🍽️</span> Show All Foods
+    </h2>
 
     <!-- Food Grid -->
     <section class="food-grid">
+      {% for food in foods %}
       <div class="food-card">
-        <img src="https://via.placeholder.com/300x150" alt="Cheese Pizza">
-        <h3>Cheese Pizza</h3>
-        <p>₹250</p>
+        <img src="{{url_for('static', filename=food[5])}}" alt="{{food[1]}}">
+        <h3>{{food[1]}}</h3>
+        <p>₹{{food[3]}}</p>
         <button>Add to Cart</button>
       </div>
-      <div class="food-card">
-        <img src="https://via.placeholder.com/300x150" alt="Veg Burger">
-        <h3>Veg Burger</h3>
-        <p>₹120</p>
-        <button>Add to Cart</button>
-      </div>
-      <div class="food-card">
-        <img src="https://via.placeholder.com/300x150" alt="White Sauce Pasta">
-        <h3>White Sauce Pasta</h3>
-        <p>₹200</p>
-        <button>Add to Cart</button>
-      </div>
-      <div class="food-card">
-        <img src="https://via.placeholder.com/300x150" alt="Grilled Sandwich">
-        <h3>Grilled Sandwich</h3>
-        <p>₹150</p>
-        <button>Add to Cart</button>
-      </div>
+      {%endfor%}
     </section>
 
-  </main>
-</body>
-</html>
+{% endblock %}

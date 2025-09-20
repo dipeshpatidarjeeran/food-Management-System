@@ -1,22 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Manage Categories</title>
+{% extends "base.html" %}
+{% block extra_css %}
   <style>
     /* Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('/static/extraImages/wallPaper.avif') 
-                no-repeat center center/cover;
-      color: #333;
-      padding: 40px;
     }
 
     h1 {
@@ -103,8 +92,9 @@
     }
 
   </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <div class="container">
     <h1>Manage Categories</h1>
 
@@ -134,5 +124,4 @@
       </tbody>
     </table>
   </div>
-</body>
-</html>
+{% endblock %}
