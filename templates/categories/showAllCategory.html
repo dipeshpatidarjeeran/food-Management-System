@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Categories</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('/static/extraImages/wallPaper.avif') 
+                no-repeat center center/cover;
+      color: #333;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #2c3e50;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    tr:hover {
+      background: #f1f7ff;
+      transition: 0.3s;
+    }
+
+    .btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Add Category */
+    .btn-add {
+    background: linear-gradient(135deg,#04f67d, #07ca3b);
+    }
+    .btn-add:hover {
+    transform: scale(1.07);
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    }
+
+    /* Update Button */
+    .btn-update {
+    background: linear-gradient(135deg, #04f67d, #07ca3b);
+    }
+    .btn-update:hover {
+    transform: scale(1.07);
+    background: linear-gradient(135deg, #12db3a,#14680d);
+    }
+
+    /* Delete Button */
+    .btn-delete {
+    background: linear-gradient(135deg, #f85032, #e73827);
+    }
+    .btn-delete:hover {
+    transform: scale(1.07);
+    background: linear-gradient(135deg, #e73827, #b31217);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Manage Categories</h1>
+
+    <div class="top-actions">
+      <a href="/addCategory" class="btn btn-add">+ Add New Category</a>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in cats %}
+        <tr>
+          <td>{{ cat[0] }}</td>
+          <td>{{ cat[1]}}</td>
+          <td>
+            <a href="/updateCategory/{{cat[0]}}" class="btn btn-update">Update</a>
+            <a href="/deleteCategory/{{cat[0]}}" class="btn btn-delete">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

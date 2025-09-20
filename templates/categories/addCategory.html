@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add New Category</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="card">
+    <h2>➕ Add New Category</h2>
+    <form method="post">
+      <div>
+        <label for="category">Enter Category Name</label>
+        <input type="text" id="category" name="cname" placeholder="e.g. Beverages, Desserts" required>
+      </div>
+      <button type="submit">Add Category</button>
+    </form>
+    <p class="note">Easily manage your food categories 🍔🍕🥗</p>
+  </div>
+</body>
+</html>
