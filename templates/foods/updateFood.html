@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .food-form-wrapper {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('/static/extraImages/foodImage.jpg') 
+                  no-repeat center center/cover;
+    }
+
+    .food-form-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .food-form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .food-form-group {
+      margin-bottom: 18px;
+    }
+
+    .food-form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #444;
+      font-weight: 600;
+    }
+
+    .food-form-group input,
+    .food-form-group select,
+    .food-form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .food-form-group input:focus,
+    .food-form-group select:focus,
+    .food-form-group textarea:focus {
+      border-color: #ff4d6d;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+    }
+
+    .food-form-group textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .food-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ff4d6d, #ff758c);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .food-btn:hover {
+      background: linear-gradient(135deg, #ff758c, #ff4d6d);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(255,77,109,0.5);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+  </style>
+{% endblock %}
+{% block content %}
+  <div class="food-form-wrapper">
+    <div class="food-form-container">
+      <h2>🍔 Update Food Item</h2>
+      <form method="post" enctype="multipart/form-data">
+        
+        <div class="food-form-group">
+          <label>Food Name</label>
+          <input type="text" name="food_name" value="{{food[1]}}" required>
+        </div>
+
+        <div class="food-form-group">
+          <label>Category</label>
+          <select name="category" required>
+            <option value="">-- Select Category --</option>
+            {% for cat in cats %}
+              <option value="{{ cat[0] }}" 
+                {% if cat[0] == food[6] %} selected {% endif %}>
+                {{ cat[1] }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="food-form-group">
+          <label>Price (₹)</label>
+          <input type="number" step="0.01" name="price" value="{{food[2]}}" required>
+        </div>
+
+        <div class="food-form-group">
+          <label>Description</label>
+          <textarea name="description">{{food[3]}}</textarea>
+        </div>
+
+        <div class="food-form-group">
+          <label>Upload Image</label>
+          <input type="file" name="image_url" accept="image/*">
+        </div>
+
+        <button type="submit" class="food-btn">Update Food</button>
+      </form>
+    </div>
+  </div>
+{%endblock%}

@@ -10,6 +10,8 @@ app.add_url_rule('/updateCategory/<cid>',view_func=cat.updateCategory,methods=["
 
 app.add_url_rule('/addFood',view_func=f.addFood,methods=["GET","POST"])
 app.add_url_rule('/showAllFoods',view_func=f.showAllFoods,methods=["GET","POST"])
+app.add_url_rule('/deleteFood/<fid>',view_func=f.deleteFood,methods=["GET","POST"])
+app.add_url_rule('/updateFood/<fid>',view_func=f.updateFood,methods=["GET","POST"])
 
 
 app.add_url_rule('/Dashboard',view_func=f.dashBoard,methods=["GET"])
