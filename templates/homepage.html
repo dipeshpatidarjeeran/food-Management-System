@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodie - Home</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+    body{background:#fff;color:#333;}
+
+    /* Header */
+    header{
+      background: linear-gradient(90deg,#ff6b6b,#876609);
+      padding:15px 50px;
+      display:flex;justify-content:space-between;align-items:center;color:#fff;
+      position:sticky;top:0;z-index:1000;
+      box-shadow:0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    header h1{font-size:28px;font-weight:700;}
+    nav ul{list-style:none;display:flex;gap:25px;}
+    nav ul li a{text-decoration:none;color:#fff;font-weight:500;transition:0.3s;}
+    nav ul li a:hover{color:#ffe66d;}
+
+    /* Hero Section */
+    .hero{
+      position:relative;
+      height:80vh;
+      display:flex;justify-content:center;align-items:center;text-align:center;
+      background:url('/static/extraImages/homepageImage.avif') no-repeat center center/cover;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .hero-content{
+      position:relative;z-index:1;color:#fff;
+    }
+
+    .hero-content h2{
+      font-size:60px;
+      margin-bottom:20px;
+      text-shadow:0 2px 10px rgba(0,0,0,0.7);
+    }
+
+    .hero-content p{
+      font-size:22px;
+      margin-bottom:30px;
+      text-shadow:0 1px 5px rgba(0,0,0,0.6);
+    }
+
+    .hero-content a{
+      text-decoration:none;
+      padding:15px 35px;
+      font-size:18px;
+      font-weight:600;
+      border-radius:50px;
+      background: linear-gradient(90deg,#ff6b6b,#fbc531);
+      color:#fff;
+      transition:0.4s;
+    }
+
+    .hero-content a:hover{
+      transform: scale(1.1);
+      background: linear-gradient(90deg,#fbc531,#ff6b6b);
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Categories Section */
+    .categories{
+      padding:70px 10%;
+      background:#fff5f0;
+      text-align:center;
+      position:relative;
+      clip-path: polygon(0 0, 100% 3%, 100% 100%, 0% 100%);
+    }
+
+    .categories h3{
+      font-size:36px;
+      margin-bottom:40px;
+      color:#ff6b6b;
+    }
+
+    .category-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:30px;
+    }
+
+    .category-grid .cat{
+      background:#fff;
+      padding:40px 20px;
+      border-radius:20px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);
+      font-size:20px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.4s;
+    }
+
+    .category-grid .cat:hover{
+      transform: translateY(-10px) scale(1.05);
+      box-shadow:0 12px 25px rgba(0,0,0,0.2);
+      background: linear-gradient(90deg,#ff6b6b,#fbc531);
+      color:#fff;
+    }
+
+    /* Featured Section */
+    .featured{
+      padding:70px 10%;
+      background:#fff0e6;
+      text-align:center;
+    }
+
+    .featured h3{
+      font-size:36px;
+      margin-bottom:40px;
+      color:#ff6b6b;
+    }
+
+    .food-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:30px;
+    }
+
+    .food-item{
+      background:#fff;
+      border-radius:25px;
+      overflow:hidden;
+      box-shadow:0 6px 20px rgba(0,0,0,0.1);
+      transition:0.4s;
+      cursor:pointer;
+    }
+
+    .food-item img{
+      width:100%;
+      height:250px;
+      object-fit:cover;
+      transition:0.4s;
+    }
+
+    .food-item:hover img{
+      transform: scale(1.05);
+    }
+
+    .food-item h4{
+      padding:15px;
+      font-size:22px;
+      color:#ff6b6b;
+    }
+
+    .food-item p{
+      padding:0 15px 15px 15px;
+      font-size:18px;
+      color:#333;
+    }
+
+    /* Footer */
+    footer{
+      background:#ff6b6b;
+      color:#fff;
+      padding:30px 10%;
+      text-align:center;
+    }
+
+    footer p{font-size:15px;}
+
+    .categories {
+    padding: 20px;
+    }
+
+    .categories h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    }
+
+    .category-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+    height: 8px;
+    }
+
+    .category-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+    }
+
+    .cat {
+    flex: 0 0 auto;
+    text-align: center;
+    }
+
+    .cat img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    }
+
+    .cat p {
+    font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+      .hero-content h2{font-size:42px;}
+      .hero-content p{font-size:18px;}
+    }
+
+    @media(max-width:480px){
+      header{flex-direction:column;gap:10px;}
+      nav ul{flex-direction:column;gap:10px;}
+      .categories,.featured{padding:50px 5%;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Foodie</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="/showAllFoods">Menu</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">SignUp</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Delicious Food Delivered Fast</h2>
+      <p>Order your favorite meals online</p>
+      <a href="#">View Menu</a>
+    </div>
+  </section>
+
+  <section class="categories">
+    <h3>What's on your mind?</h3>
+    <div class="category-scroll">
+        <div class="cat">
+        <img src="static/extraImages/pizza.jpg" alt="Pizza">
+        <p>Pizzas</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/biryani.jpg" alt="Biryani">
+        <p>Biryani</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/momos.png" alt="Momos">
+        <p>Momos</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/noodles.jpg" alt="Noodles">
+        <p>Noodles</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/coffee.jpg" alt="Coffee">
+        <p>Coffee</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/tea.jpg" alt="Tea">
+        <p>Tea</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/chole.webp" alt="Chole Bhature">
+        <p>Chole Bhature</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/lassi.webp" alt="Lassi">
+        <p>Lassi</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/pakoda.jpg" alt="Pakoda">
+        <p>Pakoda</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/rasgulla.webp" alt="Rasgulla">
+        <p>Rasgulla</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/shake.jpg" alt="Shake">
+        <p>Shake</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/puri.jpg" alt="Puri">
+        <p>Puri</p>
+        </div>
+    </div>
+    </section>
+
+  <!-- Featured Items -->
+  <section class="featured">
+    <h3>Popular Items</h3>
+    <div class="food-grid">
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/cheesePizza.jpg') }}" alt="Cheese Pizza">
+        <h4>Cheese Pizza</h4>
+        <p>₹300.00</p>
+      </div>
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/VegThali.png') }}" alt="Veg Thali">
+        <h4>Veg Thali</h4>
+        <p>₹250.00</p>
+      </div>
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/PaneerButterMasala.jpg') }}" alt="Paneer Butter Masala">
+        <h4>Paneer Butter Masala</h4>
+        <p>₹280.00</p>
+      </div>
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/cake2.webp') }}" alt="Cake">
+        <h4>Cake</h4>
+        <p>₹250.00</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Foodie. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

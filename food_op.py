@@ -68,15 +68,25 @@ def updateFood(fid):
         cats = cursor.fetchall()
         return render_template("foods/updateFood.html",food=food,cats=cats)
 
+    else:
+        food_name = request.form.get("food_name")
+        cid = request.form.get("category")
+        price = request.form.get("price")
+        description = request.form.get("description")
+        status = request.form.get("status")
 
+        f = request.files['image_url']
+        if f.filename == '':
+            filename = ''
+        else:
+            filename = secure_filename(f.filename)
+            filepath = "static/Images/" + f.filename   # save path
+            f.save(filepath)
+            filename = f", image='Images/{filename}'"
 
-def dashBoard():
-    sql = "select * from food"
-    cursor = con.cursor()
-    cursor.execute(sql)
-    foods = cursor.fetchall()
-
-    sql1 = "select * from category"
-    cursor.execute(sql1)
-    cats = cursor.fetchall()
-    return render_template("dashboard.html",foods=foods,cats=cats)
+        sql = f"update food set food_name=%s,cid=%s,price=%s,description=%s,status=%s {filename} where food_id=%s"
+        val = (food_name,cid,price,description,status,fid)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        con.commit()
+        return redirect("/showAllFoods")

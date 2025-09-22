@@ -130,10 +130,20 @@
           <label>Description</label>
           <textarea name="description">{{food[3]}}</textarea>
         </div>
-
+        <div class="food-form-group">
+          <label>Existing Image</label>
+          <img src="{{url_for('static', filename=food[4])}}" alt="food" style="width: 150px;height: 100px;">
+        </div>
         <div class="food-form-group">
           <label>Upload Image</label>
           <input type="file" name="image_url" accept="image/*">
+        </div>
+        <div class="food-form-group">
+          <label>Status</label>
+          <select name="status" required>
+            <option value="Available">Available</option>
+            <option value="Not Available">Not Available</option>
+          </select>
         </div>
 
         <button type="submit" class="food-btn">Update Food</button>
