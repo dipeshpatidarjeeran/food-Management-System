@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodie - Home</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+    body{background:#fff;color:#333;}
+
+    /* ===== Header ===== */
+    header {
+      background: #fff;
+      padding: 15px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: black;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    header h1:hover {
+      color: #e0501b;
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #030000;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #e0501b;
+      transform: translateY(-2px);
+    }
+
+    nav ul li a.active {
+      background: linear-gradient(90deg,#fbc531,#ff6b6b);
+      color: #fff;
+      transform:translateX(5px);
+    }
+
+    /* ===== Dropdown ===== */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown > a {
+      cursor: pointer;
+      /* display: inline-block; */
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown > a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #e0501b;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 8px 0;
+      top: 100%;
+      left: 0;
+      z-index: 999;
+    }
+
+    .dropdown-content li {
+      list-style: none;
+    }
+
+    .dropdown-content li a {
+      display: block;
+      color: #333;
+      padding: 10px 15px;
+      font-size: 15px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .dropdown-content li a:hover {
+      background: linear-gradient(90deg,#ff6b6b,#fbc531);
+      color: #fff;
+      border-radius: 4px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* Responsive nav */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px 30px;
+        gap: 15px;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        align-items: center;
+      }
+
+      .dropdown-content {
+        position: static;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+
+      .dropdown-content li a {
+        padding: 12px;
+      }
+    }
+
+    /* ===== Hero Section ===== */
+    .hero{
+      position:relative;
+      height:80vh;
+      display:flex;justify-content:center;align-items:center;text-align:center;
+      background:url('/static/extraImages/homepageImage.avif') no-repeat center center/cover;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .hero-content{
+      position:relative;z-index:1;color:#fff;
+    }
+
+    .hero-content h2{
+      font-size:60px;
+      margin-bottom:20px;
+      text-shadow:0 2px 10px rgba(0,0,0,0.7);
+    }
+
+    .hero-content p{
+      font-size:22px;
+      margin-bottom:30px;
+      text-shadow:0 1px 5px rgba(0,0,0,0.6);
+    }
+
+    .hero-content a{
+      text-decoration:none;
+      padding:15px 35px;
+      font-size:18px;
+      font-weight:600;
+      border-radius:50px;
+      background: linear-gradient(90deg,#ff6b6b,#fbc531);
+      color:#fff;
+      transition:0.4s;
+    }
+
+    .hero-content a:hover{
+      transform: scale(1.1);
+      background: linear-gradient(90deg,#fbc531,#ff6b6b);
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* ===== Footer ===== */
+    footer{
+      background:#ff6b6b;
+      color:#fff;
+      padding:30px 10%;
+      text-align:center;
+    }
+
+    footer p{font-size:15px;}
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Foodie</h1>
+    <nav>
+      <ul>
+        <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+        <li><a href="/menu/all" class="{% if request.path.startswith('/menu')%}active{% endif %}">Menu</a></li>
+        <li><a href="#">Contact</a></li>
+
+        {% if request.path.startswith('/menu') %}
+          <li class="dropdown">
+            <a href="#">Category ▾</a>
+            <ul class="dropdown-content">
+              <li><a href="/menu/all">All</a></li>
+              {% for cat in cats %}
+                <li><a href="/menu/{{cat[0]}}">{{cat[1]}}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          <li><a href="#">Logout</a></li>
+        {% else %}
+          <li><a href="/signup">SignUp</a></li>
+          <li><a href="/signin">SignIn</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Foodie. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

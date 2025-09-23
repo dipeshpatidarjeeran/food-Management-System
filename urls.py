@@ -22,3 +22,5 @@ app.add_url_rule('/adminLogout',view_func=a.adminLogout)
 
 
 app.add_url_rule("/",view_func=u.homePage)
+app.add_url_rule("/menu/<cid>",view_func=u.menu)
+app.add_url_rule("/foodDetails/<fid>",view_func=u.foodDetails)

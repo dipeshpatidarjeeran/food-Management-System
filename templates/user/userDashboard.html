@@ -1,0 +1,93 @@
+{% extends 'homeBase.html' %}
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Delicious Food Delivered Fast</h2>
+      <p>Order your favorite meals online</p>
+      <a href="/menu/all">View Menu</a>
+    </div>
+  </section>
+
+  <section class="categories">
+    <h3>What's on your mind?</h3>
+    <div class="category-scroll">
+        <div class="cat">
+        <img src="static/extraImages/pizza.jpg" alt="Pizza">
+        <p>Pizzas</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/biryani.jpg" alt="Biryani">
+        <p>Biryani</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/momos.png" alt="Momos">
+        <p>Momos</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/noodles.jpg" alt="Noodles">
+        <p>Noodles</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/coffee.jpg" alt="Coffee">
+        <p>Coffee</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/tea.jpg" alt="Tea">
+        <p>Tea</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/chole.webp" alt="Chole Bhature">
+        <p>Chole Bhature</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/lassi.webp" alt="Lassi">
+        <p>Lassi</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/pakoda.jpg" alt="Pakoda">
+        <p>Pakoda</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/rasgulla.webp" alt="Rasgulla">
+        <p>Rasgulla</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/shake.jpg" alt="Shake">
+        <p>Shake</p>
+        </div>
+        <div class="cat">
+        <img src="static/extraImages/puri.jpg" alt="Puri">
+        <p>Puri</p>
+        </div>
+    </div>
+    </section>
+
+  <!-- Featured Items -->
+  <section class="featured">
+    <h3>Popular Items</h3>
+    <div class="food-grid">
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/cheesePizza.jpg') }}" alt="Cheese Pizza">
+        <h4>Cheese Pizza</h4>
+        <p>₹300.00</p>
+      </div>
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/VegThali.png') }}" alt="Veg Thali">
+        <h4>Veg Thali</h4>
+        <p>₹250.00</p>
+      </div>
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/PaneerButterMasala.jpg') }}" alt="Paneer Butter Masala">
+        <h4>Paneer Butter Masala</h4>
+        <p>₹280.00</p>
+      </div>
+      <div class="food-item">
+        <img src="{{ url_for('static', filename='Images/cake2.webp') }}" alt="Cake">
+        <h4>Cake</h4>
+        <p>₹250.00</p>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
