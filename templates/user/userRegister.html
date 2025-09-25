@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+   <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .food-form-wrapper {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/static/extraImages/adminLoginImage.jpg') 
+                  no-repeat center center/cover;
+    }
+
+    .food-form-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .food-form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .food-form-group {
+      margin-bottom: 18px;
+    }
+
+    .food-form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #444;
+      font-weight: 600;
+    }
+
+    .food-form-group input,
+    .food-form-group select,
+    .food-form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .food-form-group input:focus,
+    .food-form-group select:focus,
+    .food-form-group textarea:focus {
+      border-color: #ff4d6d;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+    }
+
+    .food-form-group textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .food-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ff4d6d, #ff758c);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .food-btn:hover {
+      background: linear-gradient(135deg, #ff758c, #ff4d6d);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(255,77,109,0.5);
+    }
+    .food-form-group small {
+        display: block;
+        min-height: 18px;  
+        margin-top: 4px;
+        font-size: 13px;
+        color: red;
+        }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="food-form-wrapper">
+    <div class="food-form-container">
+      <h2>User Registration</h2>
+      <form method="post">
+        
+        <div class="food-form-group">
+          <label>User Name</label>
+          <input type="text" name="uname" required>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <small id="msg">{{ messages[0] }}</small>
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="food-form-group">
+          <label>Email</label>
+          <input type="text" name="email" required>
+          
+        </div>
+
+        <div class="food-form-group">
+          <label>Phone</label>
+          <input type="text"  name="phone" required>
+        </div>
+
+        <div class="food-form-group">
+            <label>Password</label>
+            <input type="password" id="pwd" name="pwd" required>
+        </div>
+
+        <div class="food-form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="cpwd" name="cpwd" required onkeyup="checkPassword()">
+            <small id="msg"></small>
+        </div>
+        <div class="food-form-group">
+          <label>Address</label>
+          <input type="text" name="address">
+        </div>
+
+        <button type="submit" class="food-btn">Register</button>
+      </form>
+    </div>
+  </div>
+</body>
+<script>
+const form = document.querySelector('form');
+const pwd = document.getElementById("pwd");
+const cpwd = document.getElementById("cpwd");
+const msg = document.getElementById("msg");
+
+function checkPassword() {
+  if (cpwd.value.length > 0) {
+    if (pwd.value !== cpwd.value) {
+      msg.textContent = "Passwords do not match";
+      return false;
+    } else {
+      msg.textContent = "";
+      return true;
+    }
+  } else {
+    msg.textContent = "";
+    return false;
+  }
+}
+
+// form submit event
+form.addEventListener('submit', function(e) {
+  if (!checkPassword()) {
+    e.preventDefault(); // submit block
+    cpwd.focus();
+  }
+});
+</script>
+
+</html>

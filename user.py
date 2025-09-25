@@ -1,12 +1,64 @@
-from flask import render_template,redirect,request,session
+from flask import render_template,redirect,request,session, flash
 import mysql.connector
 
 con = mysql.connector.connect(host="localHost",user="root",password="asdf@123",database="foodManagementSystem")
 
 
 def homePage():
-    return render_template("user/userDashboard.html")
+    sql = "select * from category"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    cats = cursor.fetchall()
+    return render_template("user/userDashboard.html",cats=cats)
 
+
+def userRegister():
+    if request.method == "GET":
+        return render_template("user/userRegister.html")
+    else:
+        uname = request.form.get("uname")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        pwd = request.form.get("pwd")
+        address = request.form.get("address")
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM users WHERE uname = %s", (uname,))
+        user = cursor.fetchone()
+
+        if user:
+            flash("Username already exists! Choose another.")
+            return redirect("/register")
+        else:
+            sql = "insert into Users(uname,email,phone,password,address) value(%s,%s,%s,%s,%s)"
+            val = (uname,email,phone,pwd,address)
+            cursor = con.cursor()
+            cursor.execute(sql,val)
+            con.commit()
+            return redirect("/login")
+
+    
+
+def userLogin():
+    if request.method == "GET":
+        return render_template("user/userLogin.html")
+    else:
+        uname = request.form.get("uname")
+        pwd = request.form.get("pwd")
+        sql = "select count(*) from Users where uname=%s and password=%s"
+        val = (uname,pwd)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        count = cursor.fetchone()
+        if count[0] == 0:
+            return redirect("/login")
+        else:
+            session['uname'] = uname
+            return redirect("/menu/all")
+        
+
+def userLogout():
+    session.clear()
+    return redirect("/")
 
 def menu(cid):
     cursor = con.cursor()
