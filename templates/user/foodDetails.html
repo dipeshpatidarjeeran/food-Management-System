@@ -97,9 +97,42 @@
     .btn-secondary:hover {
       background: #e0e0e0;
     }
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .qty-btn {
+      width: 35px;
+      height: 35px;
+      border: none;
+      background: #28a745;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .qty-btn:hover {
+      background: #218838;;
+    }
+
+    #quantity {
+      width: 50px;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 6px;
+    }
   </style>
 {%endblock%}
 {% block content %}
+<form method="post">
   <div class="details-container">
     <div class="details-img">
       <img src="{{url_for('static', filename=food[4])}}" alt="Food">
@@ -108,15 +141,35 @@
     <!-- Food Info -->
     <div class="details-info">
       <h2>{{food[1]}}</h2>
+      <input type="hidden" name="food_id" value="{{food[0]}}"/>
       <div class="category-tag">{{food[5]}}</div>
       <p>{{ food[3]}}</p>
       <div class="price">₹{{food[2]}}</div>
 
+      <div class="quantity-selector">
+        <button type="button" class="qty-btn" onclick="decreaseQty()">−</button>
+        <input type="text" id="quantity" name="quantity" value="1" readonly>
+        <button type="button" class="qty-btn" onclick="increaseQty()">+</button>
+      </div>
+
       <div class="btn-group">
-        <a href="/login"><button class="btn btn-primary">Add to Cart</button></a>
+        <a href="/login"><button type="submit" class="btn btn-primary">Add to Cart</button></a>
         <a href="/menu/{{food[6]}}"><button class="btn btn-secondary">Back to Menu</button></a>
       </div>
     </div>
   </div>
+</form>
+<script>
+function increaseQty() {
+  let qty = document.getElementById("quantity");
+  qty.value = parseInt(qty.value) + 1;
+}
 
+function decreaseQty() {
+  let qty = document.getElementById("quantity");
+  if (parseInt(qty.value) > 1) {
+    qty.value = parseInt(qty.value) - 1;
+  }
+}
+</script>
 {%endblock%}

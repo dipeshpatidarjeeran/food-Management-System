@@ -1,0 +1,30 @@
+create database foodManagementsystem;
+
+create table Category ( cid int primary key auto_increment,cname varchar(20));
+
+create table food(food_id int primary key auto_increment,food_name varchar(20),price float,
+     description varchar(100),image_url varchar(100),cid int);
+
+alter table food add foreign key(cid) references Category(cid);
+
+select c.food_id,c.food_name,c.price,c.description,c.image_url,cat.cname from food as c
+    inner join category as cat on
+     c.cid = cat.cid
+
+create view food_cat_vw as (
+    -> select c.food_id,c.food_name,c.price,c.description,c.image_url,cat.cname from food as c
+    ->     inner join category as cat on
+    ->      c.cid = cat.cid);
+
+ select * from food_cat_vw;
+
+create table AdminLogin(username varchar(20) primary key,password varchar(20));
+insert into AdminLogin values ('admin1','admin@123');
+insert into AdminLogin values ('admin2','admin@123');
+select COUNT(*) from adminLogin where username='admin1' and password='admin@22123' ;
+alter table AdminLogin add Primary key(username);
+create table users(uname varchar(20) primary key,pwd varchar(20));
+
+create table MyCart(id int primary key auto_increment, food_id int,username varchar(20),qty int);
+alter table MyCart add foreign key (food_id)  references food(food_id);
+alter table MyCart add foreign key (username)  references Users(uname);

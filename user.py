@@ -79,13 +79,18 @@ def menu(cid):
 
 
 def foodDetails(fid):
-    sql = """select food_id,food_name,price,description,image,cname,c.cid from food f 
-                inner join category c on c.cid=f.cid where f.food_id=%s"""
-    val = (fid,)
-    cursor = con.cursor()
-    cursor.execute(sql,val)
-    food = cursor.fetchone()
-    return render_template("user/foodDetails.html",food=food)
+    if request.method == 'GET':
+        sql = """select food_id,food_name,price,description,image,cname,c.cid from food f 
+                    inner join category c on c.cid=f.cid where f.food_id=%s"""
+        val = (fid,)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        food = cursor.fetchone()
+        return render_template("user/foodDetails.html",food=food)
+    else:
+        session["food_id"] = request.form.get("food_id")
+        session["qty"] = request.form.get("quantity")
+        return redirect("/addToCart")
 
 
 def searchFood():
@@ -100,3 +105,26 @@ def searchFood():
     cursor.execute(sql)
     cats = cursor.fetchall()
     return render_template("user/menu.html",foods=foods,cats=cats)
+
+
+def addToCart():
+    print(session)
+    if "uname" in session:
+        sql = "select count(*) from MyCart where food_id=%s and username=%s"
+        val = (session["food_id"],session["uname"])
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        count = cursor.fetchone()
+        if count[0] == 1:
+            #This is a duplicate item
+            return redirect("/")
+        else:
+            #Perform add to cart        
+            sql = "insert into mycart (food_id,username,qty) values (%s,%s,%s)"
+            val = (session["food_id"],session["uname"],session["qty"])
+            cursor.execute(sql,val)
+            con.commit()
+            return "Item Added"
+    else:
+        return redirect("/login")
+    
