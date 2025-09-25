@@ -86,3 +86,17 @@ def foodDetails(fid):
     cursor.execute(sql,val)
     food = cursor.fetchone()
     return render_template("user/foodDetails.html",food=food)
+
+
+def searchFood():
+    data = request.form.get("searchFood")
+    data = data[:3]
+    sql = f"select * from food where food_name like  '%{data}%'"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    foods = cursor.fetchall()
+    sql = "select * from category"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    cats = cursor.fetchall()
+    return render_template("user/menu.html",foods=foods,cats=cats)

@@ -46,3 +46,27 @@ def adminLogin():
 def adminLogout():
     session.clear()
     return redirect("/adminLogin")
+
+
+def viewDetails(fid):
+    sql = """select food_id,food_name,price,description,image,cname,c.cid from food f 
+                inner join category c on c.cid=f.cid where f.food_id=%s"""
+    val = (fid,)
+    cursor = con.cursor()
+    cursor.execute(sql,val)
+    food = cursor.fetchone()
+    return render_template("admin/foodDetails.html",food=food)
+
+
+def adminSearchFood():
+    data = request.form.get("searchFood")
+    data = data[:3]
+    sql = f"select * from food where food_name like  '%{data}%'"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    foods = cursor.fetchall()
+    sql = "select * from category"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    cats = cursor.fetchall()
+    return render_template("admin/adminDashboard.html",foods=foods,cats=cats)

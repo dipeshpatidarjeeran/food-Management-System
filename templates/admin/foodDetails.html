@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block extra_css %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .details-container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .details-img {
+      flex: 1 1 50%;
+    }
+
+    .details-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .details-info {
+      flex: 1 1 50%;
+      padding: 30px;
+    }
+
+    .details-info h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .category-tag {
+      display: inline-block;
+      background: #e0501b;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .details-info p {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e63946;
+      margin-bottom: 20px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0056cc;
+      transform: scale(1.05);
+    }
+
+    .btn-secondary {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+  </style>
+{%endblock%}
+{% block content %}
+  <div class="details-container">
+    <div class="details-img">
+      <img src="{{url_for('static', filename=food[4])}}" alt="Food">
+    </div>
+
+    <!-- Food Info -->
+    <div class="details-info">
+      <h2>{{food[1]}}</h2>
+      <div class="category-tag">{{food[5]}}</div>
+      <p>{{ food[3]}}</p>
+      <div class="price">₹{{food[2]}}</div>
+
+      <div class="btn-group">
+        <a href="#"><button class="btn btn-primary">Add to Cart</button></a>
+        <a href="/adminDashboard"><button class="btn btn-secondary">Go Back</button></a>
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
