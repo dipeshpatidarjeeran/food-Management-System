@@ -76,6 +76,7 @@ def menu(cid):
     cursor.execute(sql)
     cats = cursor.fetchall()
     return render_template("user/menu.html",foods=foods,cats=cats)
+    
 
 
 def foodDetails(fid):
@@ -86,7 +87,11 @@ def foodDetails(fid):
         cursor = con.cursor()
         cursor.execute(sql,val)
         food = cursor.fetchone()
-        return render_template("user/foodDetails.html",food=food)
+        sql = "select * from category"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        cats = cursor.fetchall()
+        return render_template("user/foodDetails.html",food=food,cats=cats)
     else:
         session["food_id"] = request.form.get("food_id")
         session["qty"] = request.form.get("quantity")
@@ -124,7 +129,50 @@ def addToCart():
             val = (session["food_id"],session["uname"],session["qty"])
             cursor.execute(sql,val)
             con.commit()
-            return "Item Added"
+            return redirect("/showCart")
     else:
         return redirect("/login")
     
+def showCart():
+    if "uname" in session:
+        sql = "select * from cart_vw where username=%s"
+        val = (session['uname'],)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        carts = cursor.fetchall()
+        sql = "select * from category"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        cats = cursor.fetchall()
+        return render_template("user/showCart.html",carts=carts,cats=cats)
+    else:
+        return redirect("/login")
+    
+
+def updateCart():
+    cart_id = request.form.get("cart_id")
+    action = request.form.get("action")
+    cursor = con.cursor()
+    
+    cursor.execute("select qty from mycart where Id=%s", (cart_id,))
+    row = cursor.fetchone()
+    qty = row[0]
+
+    if action == "increase":
+        qty += 1
+        cursor.execute("update mycart set qty=%s where Id=%s", (qty, cart_id))
+
+    elif action == "decrease":
+        qty -= 1
+        if qty > 0:
+            cursor.execute("update mycart set qty=%s where Id=%s", (qty, cart_id))
+        else:
+            cursor.execute("delete from mycart where Id=%s", (cart_id,))
+
+    elif action == "remove":
+        cursor.execute("delete from mycart where Id=%s", (cart_id,))
+
+    con.commit()
+    cursor.close()
+
+    return redirect("/showCart")

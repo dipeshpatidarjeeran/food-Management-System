@@ -1,0 +1,268 @@
+{% extends "homeBase.html" %}
+{% block extra_css %}
+<style>
+.cart-wrapper {
+  max-width: 1300px;
+  margin: 20px auto;
+  display: flex;
+  gap: 20px;
+  overflow: hidden; /* ✅ page par scroll bar avoid */
+}
+
+/* Left: Cart Page */
+.cart-page {
+  flex: 2;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  height: 549px;
+}
+
+.cart-page h1.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0c0c0c;
+}
+
+.cart-page .top-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+/* ✅ Scrollable table container */
+.cart-table-container {
+  flex: 1;
+  overflow-y: auto;      /* Sirf yahi scroll karega */
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+/* Table */
+.cart-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-page th,
+.cart-page td {
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 15px;
+  word-break: break-word;
+}
+
+.cart-page th {
+  background: #ff6b6b;
+  color: #fff;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.cart-page tr:hover { background: #ffeaea; }
+
+.cart-page td img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Buttons */
+.cart-page .qty-btn {
+  background: linear-gradient(135deg,#04f67d, #07ca3b); 
+  color: #201919;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 5px;
+  margin: 0 3px;
+}
+.cart-page .qty-btn:hover {
+  background: #2ef320;
+  transform: scale(1.05);
+}
+
+.cart-page .btn-delete {
+  background: #f85032;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.cart-page .btn-delete:hover {
+  background: #b31217;
+  transform: scale(1.05);
+}
+
+/* Right: Summary Box */
+.summary-box {
+  flex: 1;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 20px;
+  height: fit-content;
+  position: sticky;   /* ✅ right side fix */
+  top: 20px;
+}
+
+.summary-box h3 {
+  margin-bottom: 15px;
+  color: #ff6b6b;
+  text-align: center;
+}
+
+.summary-box .item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.summary-box .total-line {
+  font-weight: 700;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.checkout-btn {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  background: linear-gradient(90deg,#ff6b6b,#fbc531);
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 25px;
+  text-decoration: none;
+}
+.checkout-btn:hover { box-shadow:0 6px 15px rgba(0,0,0,0.3); }
+
+/* Responsive */
+@media(max-width:768px){
+  .cart-wrapper { flex-direction: column; }
+  .summary-box { position: relative; top: auto; }
+  .cart-page td img { width: 80px; height: 60px; }
+  .cart-page .qty-btn, .cart-page .btn-delete { padding: 4px 8px; font-size: 14px; }
+}
+
+/* Common Buttons */
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+/* Add New Food */
+.btn-add {
+  background: linear-gradient(135deg,#04f67d, #07ca3b);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.btn-add:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg,#00c6ff,#0072ff);
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="cart-wrapper">
+
+  <!-- Left: Cart -->
+  <div class="cart-page">
+    <div class="top-actions">
+      <a href="/menu/all" class="btn btn-add">+ Add New Food</a>
+    </div>
+
+    <!-- ✅ Wrap table in container -->
+    <div class="cart-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Food Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Sub Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set ns = namespace(grand_total=0) %}
+          {% for cart in carts %}
+            {% set subtotal = cart[3] * cart[7] %}
+            {% set ns.grand_total = ns.grand_total + subtotal %}
+            <tr>
+              <td><img src="{{ url_for('static', filename=cart[4]) }}" alt="food"></td>
+              <td>{{ cart[1] }}</td>
+              <td>₹{{ cart[3] }}</td>
+              <td>
+                <form method="POST" action="/updateCart" style="display:inline;">
+                  <input type="hidden" name="cart_id" value="{{ cart[5] }}">
+                  <button class="qty-btn" name="action" value="decrease">–</button>
+                </form>
+                {{ cart[7] }}
+                <form method="POST" action="/updateCart" style="display:inline;">
+                  <input type="hidden" name="cart_id" value="{{ cart[5] }}">
+                  <button class="qty-btn" name="action" value="increase">+</button>
+                </form>
+              </td>
+              <td>₹{{ subtotal }}</td>
+              <td>
+                <form method="POST" action="/updateCart">
+                  <input type="hidden" name="cart_id" value="{{ cart[5] }}">
+                  <button class="btn-delete" name="action" value="remove">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Right: Summary Box -->
+  <div class="summary-box">
+    <h3>Order Summary</h3>
+    {% for cart in carts %}
+      <div class="item">
+        <span>{{ cart[1] }} x {{ cart[7] }}</span>
+        <span>₹{{ (cart[3]*cart[7]) }}</span>
+      </div>
+    {% endfor %}
+      <div class="item">
+        <span>Total</span>
+        <span>₹{{ns.grand_total }}</span>
+      </div>
+
+    {% set gst = ns.grand_total * ns.grand_total.__class__('0.05') %}
+    {% set grand_total_with_gst = ns.grand_total + gst %}
+
+    <div class="item total-line">
+      <span>GST (5%)</span>
+      <span>₹{{ gst|round(2) }}</span>
+    </div>
+    <div class="item total-line">
+      <span>Grand Total</span>
+      <span>₹{{ grand_total_with_gst|round(2) }}</span>
+    </div>
+
+    <a href="/checkout" class="checkout-btn">Proceed to Payment</a>
+  </div>
+
+</div>
+{% endblock %}

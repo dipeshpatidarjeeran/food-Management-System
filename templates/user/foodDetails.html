@@ -7,6 +7,9 @@
       margin: 0;
       padding: 0;
     }
+    .details-container-box {
+      height: 539px;
+    }
 
     .details-container {
       max-width: 900px;
@@ -71,12 +74,14 @@
     }
 
     .btn {
+      display: inline-block;
       padding: 12px 20px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-size: 1rem;
       transition: 0.3s;
+      text-decoration: none; 
     }
 
     .btn-primary {
@@ -90,12 +95,15 @@
     }
 
     .btn-secondary {
-      background: #f4f4f4;
-      border: 1px solid #ddd;
+      background: #5cf679;
+      border: 1px solid #f89898;
+      color: #090303;
     }
 
     .btn-secondary:hover {
-      background: #e0e0e0;
+      background: #35b94d;
+      transform: scale(1.05);
+
     }
     .quantity-selector {
       display: flex;
@@ -132,33 +140,36 @@
   </style>
 {%endblock%}
 {% block content %}
-<form method="post">
-  <div class="details-container">
-    <div class="details-img">
-      <img src="{{url_for('static', filename=food[4])}}" alt="Food">
-    </div>
-
-    <!-- Food Info -->
-    <div class="details-info">
-      <h2>{{food[1]}}</h2>
-      <input type="hidden" name="food_id" value="{{food[0]}}"/>
-      <div class="category-tag">{{food[5]}}</div>
-      <p>{{ food[3]}}</p>
-      <div class="price">₹{{food[2]}}</div>
-
-      <div class="quantity-selector">
-        <button type="button" class="qty-btn" onclick="decreaseQty()">−</button>
-        <input type="text" id="quantity" name="quantity" value="1" readonly>
-        <button type="button" class="qty-btn" onclick="increaseQty()">+</button>
+<div class="details-container-box">
+  <form method="post">
+    <div class="details-container">
+      <div class="details-img">
+        <img src="{{url_for('static', filename=food[4])}}" alt="Food">
       </div>
 
-      <div class="btn-group">
-        <a href="/login"><button type="submit" class="btn btn-primary">Add to Cart</button></a>
-        <a href="/menu/{{food[6]}}"><button class="btn btn-secondary">Back to Menu</button></a>
+      <!-- Food Info -->
+      <div class="details-info">
+        <h2>{{food[1]}}</h2>
+        <input type="hidden" name="food_id" value="{{food[0]}}"/>
+        <div class="category-tag">{{food[5]}}</div>
+        <p>{{ food[3]}}</p>
+        <div class="price">₹{{food[2]}}</div>
+
+        <div class="quantity-selector">
+          <button type="button" class="qty-btn" onclick="decreaseQty()">-</button>
+          <input type="text" id="quantity" name="quantity" value="1" readonly>
+          <button type="button" class="qty-btn" onclick="increaseQty()">+</button>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">Add to Cart</button>
+          <a href="/menu/{{food[6]}}" class="btn btn-secondary">Back to Menu</a>
+        </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
+
 <script>
 function increaseQty() {
   let qty = document.getElementById("quantity");
