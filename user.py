@@ -122,7 +122,7 @@ def addToCart():
         count = cursor.fetchone()
         if count[0] == 1:
             #This is a duplicate item
-            return redirect("/")
+            return redirect("/showCart")
         else:
             #Perform add to cart        
             sql = "insert into mycart (food_id,username,qty) values (%s,%s,%s)"
@@ -140,11 +140,19 @@ def showCart():
         cursor = con.cursor()
         cursor.execute(sql,val)
         carts = cursor.fetchall()
+
         sql = "select * from category"
         cursor = con.cursor()
         cursor.execute(sql)
         cats = cursor.fetchall()
-        return render_template("user/showCart.html",carts=carts,cats=cats)
+        total = 0
+        for cart in carts:
+            total += float(cart[8])
+        gst = total * 0.05
+        grand_total = total + gst
+
+        session['grand_total'] = grand_total
+        return render_template("user/showCart.html",carts=carts,cats=cats,gst=gst,total=total)
     else:
         return redirect("/login")
     
@@ -176,3 +184,35 @@ def updateCart():
     cursor.close()
 
     return redirect("/showCart")
+
+
+def MakePayment():
+    if request.method == "GET":
+        sql = "select * from cart_vw where username=%s"
+        val = (session['uname'],)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        carts = cursor.fetchall()
+        return render_template("user/makePayment.html",carts=carts)
+    else:
+        cardno = request.form.get("cardno")
+        cvv = request.form.get("cvv")
+        expiry = request.form.get("expiry")
+        sql = "select count(*) from Payment where cardno=%s and cvv=%s and expiry=%s"
+        val = (cardno,cvv,expiry)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        count = cursor.fetchone()
+        if count[0] == 1:
+            # buyer update
+            sql = "update payment set balance=balance-%s where cardno=%s and cvv=%s and expiry=%s"
+            val = (session['total'],cardno,cvv,expiry)
+            cursor.execute(sql,val)
+            #seller update
+            sql = "update payment set balance=balance+%s where cardno=%s and cvv=%s and expiry=%s"
+            val = (session['total'],"222",'222','12/2030')
+            cursor.execute(sql,val)
+            con.commit()
+            return redirect("/menu/all")
+        else:
+            return redirect("/makePayment")

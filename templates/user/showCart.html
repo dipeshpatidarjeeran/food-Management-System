@@ -202,10 +202,7 @@
           </tr>
         </thead>
         <tbody>
-          {% set ns = namespace(grand_total=0) %}
           {% for cart in carts %}
-            {% set subtotal = cart[3] * cart[7] %}
-            {% set ns.grand_total = ns.grand_total + subtotal %}
             <tr>
               <td><img src="{{ url_for('static', filename=cart[4]) }}" alt="food"></td>
               <td>{{ cart[1] }}</td>
@@ -221,7 +218,7 @@
                   <button class="qty-btn" name="action" value="increase">+</button>
                 </form>
               </td>
-              <td>₹{{ subtotal }}</td>
+              <td>₹{{ cart[8] }}</td>
               <td>
                 <form method="POST" action="/updateCart">
                   <input type="hidden" name="cart_id" value="{{ cart[5] }}">
@@ -246,22 +243,19 @@
     {% endfor %}
       <div class="item">
         <span>Total</span>
-        <span>₹{{ns.grand_total }}</span>
+        <span>₹{{total }}</span>
       </div>
-
-    {% set gst = ns.grand_total * ns.grand_total.__class__('0.05') %}
-    {% set grand_total_with_gst = ns.grand_total + gst %}
 
     <div class="item total-line">
       <span>GST (5%)</span>
-      <span>₹{{ gst|round(2) }}</span>
+      <span>₹{{ gst }}</span>
     </div>
     <div class="item total-line">
       <span>Grand Total</span>
-      <span>₹{{ grand_total_with_gst|round(2) }}</span>
+      <span>₹{{ session['grand_total'] }}</span>
     </div>
 
-    <a href="/checkout" class="checkout-btn">Proceed to Payment</a>
+    <a href="/makePayment" class="checkout-btn">Proceed to Payment</a>
   </div>
 
 </div>

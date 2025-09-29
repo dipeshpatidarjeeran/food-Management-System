@@ -1,0 +1,127 @@
+{% extends "homeBase.html" %}
+{% block extra_css %}
+  <style>
+
+    .checkout-wrapper {
+    display: flex;
+    justify-content: center; /* horizontal centering */
+    align-items: center;     /* vertical centering */
+    height: 80vh;            /* or any height you want */
+    }
+
+    .checkout-container {
+    background: #fff;
+    width: 420px;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease-in-out;
+    }
+
+    .checkout-container:hover {
+      transform: scale(1.02);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .order-summary {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .order-summary p {
+      margin: 6px 0;
+      font-size: 14px;
+    }
+
+    .payment-method {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    select:focus, input:focus {
+      border: 1px solid #ff6b81;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #ff6b81, #ff9472);
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #ff4757, #ff6b81);
+      transform: translateY(-2px);
+    }
+  </style>
+{%endblock%}
+
+{% block content %}
+<div class="checkout-wrapper">
+<form method="POST">
+  <div class="checkout-container">
+    <h2>Order Items</h2>
+
+    <div class="order-summary">
+    <p><b>Order:</b> 
+        {% for cart in carts %}
+        {{ cart[1] }} x {{ cart[7] }},
+        {% endfor %}
+    </p>
+      <p><b>Total:</b> ₹{{session['grand_total']}}</p>
+    </div>
+
+    <div class="payment-method">
+      <label for="saved-payment">Saved Payment Method</label>
+      <select id="saved-payment">
+        <option>Visa ending 4242</option>
+        <option>Mastercard ending 8899</option>
+        <option>UPI: alice@upi</option>
+        <option>Add New Payment Method</option>
+      </select>
+    </div>
+
+    <div class="new-card">
+      <label>Card Number</label>
+      <input type="text" placeholder="xxxx xxxx xxxx xxxx" name="cardno" required>
+      
+      <label>Expiry Date</label>
+      <input type="text" placeholder="MM/YY" name="expiry" required>
+      
+      <label>CVV</label>
+      <input type="password" placeholder="***" name="cvv" required>
+    </div>
+
+    <button type="submit" class="btn">Pay Now</button>
+  </div>
+</form>
+</div>
+{%endblock%}
