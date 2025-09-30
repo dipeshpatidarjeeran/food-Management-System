@@ -1,0 +1,98 @@
+{% extends "homeBase.html" %}
+{% block extra_css %}
+  <style>
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .orders-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .orders-container-box {
+        height: 588px;
+    }
+
+    .order-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .order-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .order-id {
+      font-weight: 600;
+      color: #4CAF50;
+    }
+
+    .order-status {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .status-pending { background: #ffeb3b; color: #333; }
+    .status-shipped { background: #03a9f4; color: #fff; }
+    .status-delivered { background: #4caf50; color: #fff; }
+
+    .order-details p {
+      margin: 6px 0;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #e91e63;
+    }
+        img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    }
+  </style>
+
+{%endblock%}
+
+{% block content %}
+<div class="orders-container-box">
+  <h2>My Orders</h2>
+  <div class="orders-container">
+
+     {% for cart in carts%}
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-id">#100{{cart[9]}}</span>
+        <span class="order-status status-shipped">Shipped</span>
+      </div>
+      <div>
+        <img src="{{ url_for('static', filename=cart[4]) }}" alt="{{ cart[1] }}">
+      </div>
+      <div class="order-details">
+        <p>📦 Product: {{ cart[1] }} </p>
+        <p>🔢 Quantity: {{ cart[7] }}</p>
+        <p class="price">💰 Total: ₹{{ cart[8] }}</p>
+      </div>
+    </div>
+    {%endfor%}
+
+  </div>
+</div>
+{%endblock%}

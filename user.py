@@ -233,3 +233,12 @@ def MakePayment():
             return redirect("/menu/all")
         else:
             return redirect("/makePayment")
+        
+
+def showOrders():
+    sql = "select * from cart_vw m inner join order_master o on o.order_id = m.order_id where m.username=%s"
+    val = (session['uname'],)
+    cursor = con.cursor()
+    cursor.execute(sql,val)
+    carts = cursor.fetchall()
+    return render_template("user/showOrders.html",carts=carts)

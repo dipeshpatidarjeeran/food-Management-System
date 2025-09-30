@@ -21,7 +21,15 @@ def adminDashboard():
     sql1 = "select * from category"
     cursor.execute(sql1)
     cats = cursor.fetchall()
-    return render_template("admin/adminDashboard.html",foods=foods,cats=cats)
+
+    sql1 = "select * from order_master"
+    cursor.execute(sql1)
+    orders = cursor.fetchall()
+
+    sql1 = "select * from users"
+    cursor.execute(sql1)
+    users = cursor.fetchall()
+    return render_template("admin/adminDashboard.html",foods=foods,cats=cats,orders=orders,users=users)
 
 
 
@@ -70,3 +78,11 @@ def adminSearchFood():
     cursor.execute(sql)
     cats = cursor.fetchall()
     return render_template("admin/adminDashboard.html",foods=foods,cats=cats)
+
+
+def showAllOrders():
+    sql = "select * from cart_vw m inner join order_master o on o.order_id = m.order_id"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    carts = cursor.fetchall()
+    return render_template("admin/showAllOrders.html",carts=carts)

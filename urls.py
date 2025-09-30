@@ -21,6 +21,7 @@ app.add_url_rule('/adminLogin',view_func=a.adminLogin,methods=["GET","POST"])
 app.add_url_rule('/adminLogout',view_func=a.adminLogout)
 app.add_url_rule('/adminSearchFood',view_func=a.adminSearchFood,methods=['GET','POST'])
 app.add_url_rule('/viewDetails/<fid>',view_func=a.viewDetails)
+app.add_url_rule('/showAllOrders',view_func=a.showAllOrders)
 
 
 app.add_url_rule("/",view_func=u.homePage)
@@ -34,3 +35,4 @@ app.add_url_rule("/addToCart",view_func=u.addToCart,methods=["GET","POST"])
 app.add_url_rule("/showCart",view_func=u.showCart,methods=["GET","POST"])
 app.add_url_rule("/updateCart",view_func=u.updateCart,methods=["GET","POST"])
 app.add_url_rule("/makePayment",view_func=u.MakePayment,methods = ["GET","POST"])
+app.add_url_rule("/showOrders",view_func=u.showOrders,methods = ["GET","POST"])
