@@ -1,5 +1,6 @@
 from flask import render_template,redirect,request,session, flash
 import mysql.connector
+import datetime
 
 con = mysql.connector.connect(host="localHost",user="root",password="asdf@123",database="foodManagementSystem")
 
@@ -115,7 +116,7 @@ def searchFood():
 def addToCart():
     print(session)
     if "uname" in session:
-        sql = "select count(*) from MyCart where food_id=%s and username=%s"
+        sql = "select count(*) from MyCart where food_id=%s and username=%s and order_id is null"
         val = (session["food_id"],session["uname"])
         cursor = con.cursor()
         cursor.execute(sql,val)
@@ -125,8 +126,8 @@ def addToCart():
             return redirect("/showCart")
         else:
             #Perform add to cart        
-            sql = "insert into mycart (food_id,username,qty) values (%s,%s,%s)"
-            val = (session["food_id"],session["uname"],session["qty"])
+            sql = "insert into mycart (food_id,username,qty,status) values (%s,%s,%s,%s)"
+            val = (session["food_id"],session["uname"],session["qty"],0)
             cursor.execute(sql,val)
             con.commit()
             return redirect("/showCart")
@@ -135,7 +136,7 @@ def addToCart():
     
 def showCart():
     if "uname" in session:
-        sql = "select * from cart_vw where username=%s"
+        sql = "select * from cart_vw where username=%s and order_id is null"
         val = (session['uname'],)
         cursor = con.cursor()
         cursor.execute(sql,val)
@@ -188,7 +189,7 @@ def updateCart():
 
 def MakePayment():
     if request.method == "GET":
-        sql = "select * from cart_vw where username=%s"
+        sql = "select * from cart_vw where username=%s and order_id is null"
         val = (session['uname'],)
         cursor = con.cursor()
         cursor.execute(sql,val)
@@ -206,13 +207,29 @@ def MakePayment():
         if count[0] == 1:
             # buyer update
             sql = "update payment set balance=balance-%s where cardno=%s and cvv=%s and expiry=%s"
-            val = (session['total'],cardno,cvv,expiry)
+            val = (session['grand_total'],cardno,cvv,expiry)
             cursor.execute(sql,val)
             #seller update
             sql = "update payment set balance=balance+%s where cardno=%s and cvv=%s and expiry=%s"
-            val = (session['total'],"222",'222','12/2030')
+            val = (session['grand_total'],"222",'222','12/2030')
             cursor.execute(sql,val)
             con.commit()
+            
+            sql = "insert into order_master (date_of_order,amount) values (%s,%s)"
+            val = (datetime.datetime.now().date(),session["grand_total"])
+            cursor.execute(sql,val)
+            con.commit()
+            sql = "select order_id from order_master where date_of_order=%s and amount=%s"
+            val = (datetime.datetime.now().date(),session["grand_total"])
+            cursor.execute(sql,val)
+            order_id = cursor.fetchone()[0]
+            #print(order_id)
+            sql = "update mycart set order_id=%s,status=1 where username=%s and order_id is null"
+            val = (order_id,session["uname"])
+            cursor.execute(sql,val)
+            con.commit()
+            session.pop("grand_total")
+            
             return redirect("/menu/all")
         else:
             return redirect("/makePayment")
