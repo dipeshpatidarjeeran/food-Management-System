@@ -1,5 +1,6 @@
 {% extends "homeBase.html" %}
 {% block extra_css %}
+<script src="{{ url_for('static', filename='js/myscript.js') }}"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -169,18 +170,4 @@
     </div>
   </form>
 </div>
-
-<script>
-function increaseQty() {
-  let qty = document.getElementById("quantity");
-  qty.value = parseInt(qty.value) + 1;
-}
-
-function decreaseQty() {
-  let qty = document.getElementById("quantity");
-  if (parseInt(qty.value) > 1) {
-    qty.value = parseInt(qty.value) - 1;
-  }
-}
-</script>
 {%endblock%}

@@ -75,7 +75,9 @@
 <div class="orders-container-box">
   <h2>My Orders</h2>
   <div class="orders-container">
-
+    {% if not carts %}
+      <h2>Orders is empty..</h2>
+    {%endif%}
      {% for cart in carts%}
     <div class="order-card">
       <div class="order-header">

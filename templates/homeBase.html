@@ -359,7 +359,7 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(90deg,#fbc531,#ff6b6b);
+      background: linear-gradient(90deg,#7b63f2,#ff6b6b);
       color: #fff;
       font-weight: bold;
       font-size: 16px;
@@ -397,7 +397,7 @@
         {% if 'uname' in session %}
           <li><a href="/logout">Logout</a></li>
           <li><a>{{ session['uname'] }}</a></li>
-          <li><div class="user-avatar">{{ session['uname'][0] }}</div></li>
+          <li><div class="user-avatar">{{ session['uname'][0]|upper }}</div></li>
         {%else%}
           <li><a href="/register">Register</a></li>
           <li><a href="/login">Login</a></li>
