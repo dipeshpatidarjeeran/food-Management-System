@@ -22,6 +22,7 @@ app.add_url_rule('/adminLogout',view_func=a.adminLogout)
 app.add_url_rule('/adminSearchFood',view_func=a.adminSearchFood,methods=['GET','POST'])
 app.add_url_rule('/viewDetails/<fid>',view_func=a.viewDetails)
 app.add_url_rule('/showAllOrders',view_func=a.showAllOrders)
+app.add_url_rule('/showAllUsers',view_func=a.showAllUsers)
 
 
 app.add_url_rule("/",view_func=u.homePage)

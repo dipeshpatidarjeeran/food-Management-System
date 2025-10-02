@@ -86,3 +86,11 @@ def showAllOrders():
     cursor.execute(sql)
     carts = cursor.fetchall()
     return render_template("admin/showAllOrders.html",carts=carts)
+
+
+def showAllUsers():
+    sql = "select * from users"
+    cursor = con.cursor()
+    cursor.execute(sql)
+    users = cursor.fetchall()
+    return render_template("admin/showAllUsers.html",users=users)
