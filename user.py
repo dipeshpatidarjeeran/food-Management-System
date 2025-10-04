@@ -194,6 +194,9 @@ def MakePayment():
         cursor = con.cursor()
         cursor.execute(sql,val)
         carts = cursor.fetchall()
+
+        if not carts:
+            return redirect("/showCart")
         return render_template("user/makePayment.html",carts=carts)
     else:
         cardno = request.form.get("cardno")
@@ -237,11 +240,30 @@ def MakePayment():
 
 def showOrders():
     if "uname" in session:
-        sql = "select * from cart_vw m inner join order_master o on o.order_id = m.order_id where m.username=%s"
+        # sql = "select * from cart_vw m inner join order_master o on o.order_id = m.order_id where m.username=%s"
+        sql = "select distinct(order_id),date_of_order,amount from order_vw where username=%s"
         val = (session['uname'],)
         cursor = con.cursor()
         cursor.execute(sql,val)
-        carts = cursor.fetchall()
-        return render_template("user/showOrders.html",carts=carts)
+        order_details = cursor.fetchall()
+
+        sql = "select food_name,price,description,image,qty,sub_total,order_id from order_vw where username=%s"
+        val = (session["uname"],)
+        cursor = con.cursor()
+        cursor.execute(sql,val)
+        product_details = cursor.fetchall()
+
+        final_data = {}
+        for order in order_details:
+            final_data[order] = []
+            for product in product_details:
+                if order[0] == product[6]:
+                    final_data[order].append(product)
+
+        sql = "select * from category"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        cats = cursor.fetchall()
+        return render_template("user/showOrders.html",final_data=final_data,cats=cats)
     else:
         return redirect("/login")

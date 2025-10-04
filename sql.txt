@@ -33,3 +33,9 @@ alter table MyCart add foreign key (username)  references Users(uname);
 create view cart_vw as (
 select c.food_id,c.food_name,c.description,c.price,c.image,m.id,m.username,m.qty,m.qty*c.price "sub_total",
 m.order_id from food c inner join mycart m on c.food_id = m.food_id)
+
+
+create view order_vw as (
+     select c.food_id,c.food_name,c.description,c.price,c.image,c.username,c.qty,c.qty*c.price "sub_total",o.order_id,o.date_of_order,o.amount
+     from cart_vw as c inner join order_master as o
+     on c.order_id=o.order_id);

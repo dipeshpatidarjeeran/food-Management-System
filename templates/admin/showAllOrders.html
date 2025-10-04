@@ -1,98 +1,152 @@
 {% extends "base.html" %}
 {% block extra_css %}
-  <style>
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #333;
-    }
+<style>
+  h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
 
-    .orders-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .orders-container-box {
-        height: 588px;
-    }
+.orders-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 orders per row */
+  gap: 20px;
+}
 
-    .order-card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+/* ❌ Fixed height hata do */
+.orders-container-box {
+  min-height: 70vh;   /* content ke hisaab se height le */
+  margin-bottom: 40px; /* footer se thoda gap */
+}
 
-    .order-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
+.order-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    .order-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
+.order-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 
-    .order-id {
-      font-weight: 600;
-      color: #4CAF50;
-    }
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
 
-    .order-status {
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 500;
-    }
+.order-id {
+  font-weight: 600;
+  color: #4CAF50;
+}
 
-    .status-pending { background: #ffeb3b; color: #333; }
-    .status-shipped { background: #03a9f4; color: #fff; }
-    .status-delivered { background: #4caf50; color: #fff; }
+.order-status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
 
-    .order-details p {
-      margin: 6px 0;
-      font-size: 15px;
-      color: #555;
-    }
+.status-pending { background: #ffeb3b; color: #333; }
+.status-shipped { background: #03a9f4; color: #fff; }
+.status-delivered { background: #4caf50; color: #fff; }
 
-    .price {
-      font-weight: bold;
-      color: #e91e63;
-    }
-        img {
-    width: 100px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    }
-  </style>
+/* ✅ Products inside order - 3 per row */
+.order-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.order-item {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.order-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.order-img img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.order-details {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+.order-details p {
+  margin: 4px 0;
+}
+
+.price {
+  font-weight: bold;
+  color: #e91e63;
+}
+
+img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+</style>
+
+
 
 {%endblock%}
 
 {% block content %}
 <div class="orders-container-box">
-  <h1>All Orders</h1>
+  <h2>All Orders</h2>
   <div class="orders-container">
+    {% if not final_data %}
+      <h2>Orders are empty..</h2>
+    {% endif %}
 
-     {% for cart in carts%}
-    <div class="order-card">
-      <div class="order-header">
-        <span class="order-id">#100{{cart[9]}}</span>
-        <span class="order-status status-shipped">Shipped</span>
-      </div>
-      <div>
-        <img src="{{ url_for('static', filename=cart[4]) }}" alt="{{ cart[1] }}">
-      </div>
-      <div class="order-details">
-        <p>📦 Product: {{ cart[1] }} </p>
-        <p>🔢 Quantity: {{ cart[7] }}</p>
-        <p class="price">💰 Total: ₹{{ cart[8] }}</p>
-      </div>
-    </div>
-    {%endfor%}
+    {% for order, items in final_data.items() %}
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">#100{{ order[0] }}</span>
+          <span class="order-date">📅 {{ order[1] }}</span>
+          <span class="order-amount">💰 ₹{{ order[2] }}+GST(5%)</span>
+          <span class="order-status status-shipped">Shipped</span>
+        </div>
+        <span class="order-id">{{ order[3] }}</span>
 
+        <div class="order-items">
+          {% for item in items %}
+            <div class="order-item">
+              <div class="order-img">
+                <img src="{{ url_for('static', filename=item[3]) }}" alt="{{ item[0] }}">
+              </div>
+              <div class="order-details">
+                <p>📦 Product: {{ item[0] }}</p>
+                <p>💵 Price: ₹{{ item[1] }}</p>
+                <!-- <p>📝 {{ item[2] }}</p> -->
+                <p>🔢 Quantity: {{ item[4] }}</p>
+                <p class="price">💰 SubTotal: ₹{{ item[5] }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
   </div>
 </div>
-{%endblock%}
+{% endblock %}

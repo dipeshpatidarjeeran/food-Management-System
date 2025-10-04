@@ -81,11 +81,28 @@ def adminSearchFood():
 
 
 def showAllOrders():
-    sql = "select * from cart_vw m inner join order_master o on o.order_id = m.order_id"
-    cursor = con.cursor()
-    cursor.execute(sql)
-    carts = cursor.fetchall()
-    return render_template("admin/showAllOrders.html",carts=carts)
+    if "admin" in session:
+        # sql = "select * from cart_vw m inner join order_master o on o.order_id = m.order_id where m.username=%s"
+        sql = "select distinct(order_id),date_of_order,amount,username from order_vw"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        order_details = cursor.fetchall()
+
+        sql = "select food_name,price,description,image,qty,sub_total,order_id from order_vw"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        product_details = cursor.fetchall()
+
+        final_data = {}
+        for order in order_details:
+            final_data[order] = []
+            for product in product_details:
+                if order[0] == product[6]:
+                    final_data[order].append(product)
+
+        return render_template("admin/showAllOrders.html",final_data=final_data)
+    else:
+        return redirect("/adminLogout")
 
 
 def showAllUsers():
