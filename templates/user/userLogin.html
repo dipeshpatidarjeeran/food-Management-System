@@ -115,6 +115,13 @@
       <div class="input-group">
         <label for="password">Password</label>
         <input type="password" id="password" name="pwd" placeholder="Enter your password" required>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="item total-line">
+              <span id="msg" style="color: rgb(240, 233, 233);">{{ messages[0] }}</span>
+            </div>
+          {% endif %}
+        {% endwith %}
       </div>
 
       <button type="submit" class="btn">Login</button>

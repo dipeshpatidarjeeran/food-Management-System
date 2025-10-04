@@ -52,7 +52,7 @@ def adminLogin():
         
 
 def adminLogout():
-    session.clear()
+    session.pop("admin")
     return redirect("/adminLogin")
 
 
@@ -68,16 +68,19 @@ def viewDetails(fid):
 
 def adminSearchFood():
     data = request.form.get("searchFood")
-    data = data[:3]
-    sql = f"select * from food where food_name like  '%{data}%'"
-    cursor = con.cursor()
-    cursor.execute(sql)
-    foods = cursor.fetchall()
-    sql = "select * from category"
-    cursor = con.cursor()
-    cursor.execute(sql)
-    cats = cursor.fetchall()
-    return render_template("admin/adminDashboard.html",foods=foods,cats=cats)
+    if data:
+        data = data[:3]
+        sql = f"select * from food where food_name like  '%{data}%'"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        foods = cursor.fetchall()
+        sql = "select * from category"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        cats = cursor.fetchall()
+        return render_template("admin/adminDashboard.html",foods=foods,cats=cats)
+    else:
+        return redirect("/adminDashboard")
 
 
 def showAllOrders():

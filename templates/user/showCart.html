@@ -256,6 +256,13 @@
     </div>
 
     <a href="/makePayment" class="checkout-btn">Proceed to Payment</a>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="item total-line">
+          <span id="msg" style="color: red;">{{ messages[0] }}</span>
+        </div>
+      {% endif %}
+      {% endwith %}
   </div>
 
 </div>

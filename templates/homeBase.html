@@ -299,6 +299,7 @@
 
     .dropdown-content li a {
       display: block;
+      width: 100%;
       color: #333;
       padding: 10px 15px;
       font-size: 15px;
@@ -382,7 +383,7 @@
       <ul>
         <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
         <li><a href="/menu/all" class="{% if request.path.startswith('/menu')%}active{% endif %}">Menu</a></li>
-        <li><a href="#">Contact</a></li>
+        <!-- <li><a href="#">Contact</a></li> -->
         <li class="dropdown">
           <a href="#">Category</a>
           <ul class="dropdown-content">

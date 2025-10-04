@@ -51,6 +51,7 @@ def userLogin():
         cursor.execute(sql,val)
         count = cursor.fetchone()
         if count[0] == 0:
+            flash("Invalid Username and Password...")
             return redirect("/login")
         else:
             session['uname'] = uname
@@ -58,7 +59,7 @@ def userLogin():
         
 
 def userLogout():
-    session.clear()
+    session.pop("uname")
     return redirect("/")
 
 def menu(cid):
@@ -101,16 +102,19 @@ def foodDetails(fid):
 
 def searchFood():
     data = request.form.get("searchFood")
-    data = data[:3]
-    sql = f"select * from food where food_name like  '%{data}%'"
-    cursor = con.cursor()
-    cursor.execute(sql)
-    foods = cursor.fetchall()
-    sql = "select * from category"
-    cursor = con.cursor()
-    cursor.execute(sql)
-    cats = cursor.fetchall()
-    return render_template("user/menu.html",foods=foods,cats=cats)
+    if data:
+        data = data[:3]
+        sql = f"select * from food where food_name like  '%{data}%'"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        foods = cursor.fetchall()
+        sql = "select * from category"
+        cursor = con.cursor()
+        cursor.execute(sql)
+        cats = cursor.fetchall()
+        return render_template("user/menu.html",foods=foods,cats=cats)
+    else:
+        return redirect("/menu/all")
 
 
 def addToCart():
@@ -196,6 +200,7 @@ def MakePayment():
         carts = cursor.fetchall()
 
         if not carts:
+            flash("Please add the foods...")
             return redirect("/showCart")
         return render_template("user/makePayment.html",carts=carts)
     else:
