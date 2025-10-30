@@ -89,7 +89,13 @@
 <form method="POST">
   <div class="checkout-container">
     <h2>Order Items</h2>
-
+    {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="item total-line">
+              <span id="msg" style="color: rgb(247, 9, 9);">{{ messages[0] }}</span>
+            </div>
+          {% endif %}
+    {% endwith %}
     <div class="order-summary">
     <p><b>Order:</b> 
         {% for cart in carts %}

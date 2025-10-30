@@ -207,22 +207,26 @@ def MakePayment():
         cardno = request.form.get("cardno")
         cvv = request.form.get("cvv")
         expiry = request.form.get("expiry")
-        sql = "select count(*) from Payment where cardno=%s and cvv=%s and expiry=%s"
+        sql = "select count(*), balance from Payment where cardno=%s and cvv=%s and expiry=%s"
         val = (cardno,cvv,expiry)
         cursor = con.cursor()
         cursor.execute(sql,val)
         count = cursor.fetchone()
         if count[0] == 1:
             # buyer update
-            sql = "update payment set balance=balance-%s where cardno=%s and cvv=%s and expiry=%s"
-            val = (session['grand_total'],cardno,cvv,expiry)
-            cursor.execute(sql,val)
-            #seller update
-            sql = "update payment set balance=balance+%s where cardno=%s and cvv=%s and expiry=%s"
-            val = (session['grand_total'],"222",'222','12/2030')
-            cursor.execute(sql,val)
-            con.commit()
-            
+            if count[1] > session['grand_total']:
+                sql = "update payment set balance=balance-%s where cardno=%s and cvv=%s and expiry=%s"
+                val = (session['grand_total'],cardno,cvv,expiry)
+                cursor.execute(sql,val)
+                #seller update
+                sql = "update payment set balance=balance+%s where cardno=%s and cvv=%s and expiry=%s"
+                val = (session['grand_total'],"222",'222','12/2030')
+                cursor.execute(sql,val)
+                con.commit()
+            else:
+                flash("You don't have sufficient balance...")
+                return redirect("/makePayment")    
+             
             sql = "insert into order_master (date_of_order,amount) values (%s,%s)"
             val = (datetime.datetime.now().date(),session["grand_total"])
             cursor.execute(sql,val)

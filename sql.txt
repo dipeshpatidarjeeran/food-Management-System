@@ -12,9 +12,9 @@ select c.food_id,c.food_name,c.price,c.description,c.image_url,cat.cname from fo
      c.cid = cat.cid
 
 create view food_cat_vw as (
-    -> select c.food_id,c.food_name,c.price,c.description,c.image_url,cat.cname from food as c
-    ->     inner join category as cat on
-    ->      c.cid = cat.cid);
+select c.food_id,c.food_name,c.price,c.description,c.image_url,cat.cname from food as c
+    inner join category as cat on
+     c.cid = cat.cid);
 
  select * from food_cat_vw;
 
@@ -23,12 +23,23 @@ insert into AdminLogin values ('admin1','admin@123');
 insert into AdminLogin values ('admin2','admin@123');
 select COUNT(*) from adminLogin where username='admin1' and password='admin@22123' ;
 alter table AdminLogin add Primary key(username);
-create table users(uname varchar(20) primary key,pwd varchar(20));
+create table users(uname varchar(20) primary key,password varchar(20),email varcahr(100),phone varchar(20),
+address varcahr(255));
 
 create table MyCart(Id int primary key auto_increment, food_id int,username varchar(20),qty int);
 alter table MyCart add foreign key (food_id)  references food(food_id);
 alter table MyCart add foreign key (username)  references Users(uname);
 
+create table Payment(cardno varchar(4) primary key,cvv varchar(4),expiry varchar(10),balance float);
+insert into Payment values ('111','111','12/2030',20000);
+insert into Payment values ('222','222','12/2030',20000);
+
+create table Order_Master (order_id int primary key auto_increment,
+ date_of_order date,
+amount float);
+alter table mycart add order_id int ;
+alter table mycart add foreign key(order_id) references order_master(order_id) ;
+alter table mycart add status int default  0;
 
 create view cart_vw as (
 select c.food_id,c.food_name,c.description,c.price,c.image,m.id,m.username,m.qty,m.qty*c.price "sub_total",
